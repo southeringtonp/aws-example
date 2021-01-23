@@ -1,0 +1,8 @@
+.*.swp
+.terraform
+.terraform.tfstate.lock.info
+.terraform.lock.hcl
+*.tfstate
+*.backup
+*.bak
+id_*
