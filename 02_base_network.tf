@@ -1,3 +1,6 @@
+############################################################
+# VPC and Subnet Definitions
+############################################################
 
 resource "aws_vpc" "vpc1" {
     cidr_block = "10.0.0.0/16"
@@ -46,6 +49,12 @@ resource "aws_subnet" "sub4" {
     }
 }
 
+
+
+############################################################
+# Internet Connectivity
+############################################################
+
 resource "aws_internet_gateway" "igw" {
     vpc_id = aws_vpc.vpc1.id
     tags = {
@@ -68,6 +77,12 @@ resource "aws_nat_gateway" "natgw" {
     depends_on = [aws_internet_gateway.igw]
 }
 
+
+
+############################################################
+# Routing
+############################################################
+
 resource "aws_route_table" "rt_public" {
     vpc_id = aws_vpc.vpc1.id
     route {
@@ -79,12 +94,11 @@ resource "aws_route_table" "rt_public" {
     }
 }
 
-## Change the main routing table for the VPC to our custom route table 
+## Change the main routing table for the **VPC** to our custom route table 
 #resource "aws_main_route_table_association" "r-vpc1" {
 #    vpc_id = aws_vpc.vpc1.id
 #    route_table_id = aws_route_table.rt.id
 #}
-
 
 resource "aws_route_table_association" "r-sub1" {
     subnet_id = aws_subnet.sub1.id
@@ -92,7 +106,7 @@ resource "aws_route_table_association" "r-sub1" {
 }
 
 resource "aws_route_table_association" "r-sub2" {
-    subnet_id = aws_subnet.sub1.id
+    subnet_id = aws_subnet.sub2.id
     route_table_id = aws_route_table.rt_public.id
 }
 

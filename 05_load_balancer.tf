@@ -47,34 +47,13 @@ resource "aws_lb_target_group" "lbtarget" {
     load_balancing_algorithm_type = "round_robin"
 
     target_type = "instance"
-    
-#    health_check {
-#        enabled = "true"
-#        path = "/"
-#        matcher = "200"
-#    }
 }
+
 
 resource "aws_lb_target_group_attachment" "backend" {
     target_group_arn = aws_lb_target_group.lbtarget.arn
     target_id = aws_instance.compute3.id
 }
-
-#resource "aws_lb_listener_rule" "static" {
-#    listener_arn = aws_lb_listener.listener80.arn
-#    priority = 100
-#
-#    action {
-#        type = "forward"
-#        target_group_arn = aws_lb_target_group.lbtarget.arn
-#    }
-#    condition {
-#        path_pattern {
-#            values = ["/*"]
-#        }
-#    }
-#}
-
 
 
 

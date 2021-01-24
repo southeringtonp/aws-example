@@ -11,3 +11,6 @@ output "load_balancer_public_ip" {
     value = aws_eip.eip_lb.public_ip
 }
 
+output "load_balancer_hostname" {
+    value = aws_lb.lb.dns_name
+}
