@@ -52,7 +52,7 @@ resource "aws_subnet" "sub4" {
 
 
 ############################################################
-# Internet Connectivity
+# Internet Gateways
 ############################################################
 
 resource "aws_internet_gateway" "igw" {
@@ -94,24 +94,7 @@ resource "aws_route_table" "rt_public" {
     }
 }
 
-## Change the main routing table for the **VPC** to our custom route table 
-#resource "aws_main_route_table_association" "r-vpc1" {
-#    vpc_id = aws_vpc.vpc1.id
-#    route_table_id = aws_route_table.rt.id
-#}
-
-resource "aws_route_table_association" "r-sub1" {
-    subnet_id = aws_subnet.sub1.id
-    route_table_id = aws_route_table.rt_public.id
-}
-
-resource "aws_route_table_association" "r-sub2" {
-    subnet_id = aws_subnet.sub2.id
-    route_table_id = aws_route_table.rt_public.id
-}
-
-
-resource "aws_route_table" "rt_private" {
+resource "aws_route_table" "rt_nat" {
     vpc_id = aws_vpc.vpc1.id
     route {
         cidr_block = "0.0.0.0/0"
@@ -123,63 +106,23 @@ resource "aws_route_table" "rt_private" {
 }
 
 
+resource "aws_route_table_association" "r-sub1" {
+    subnet_id = aws_subnet.sub1.id
+    route_table_id = aws_route_table.rt_public.id
+}
+
+resource "aws_route_table_association" "r-sub2" {
+    subnet_id = aws_subnet.sub2.id
+    route_table_id = aws_route_table.rt_public.id
+}
 
 resource "aws_route_table_association" "r-sub3" {
     subnet_id = aws_subnet.sub3.id
-    route_table_id = aws_route_table.rt_private.id
+    route_table_id = aws_route_table.rt_nat.id
 }
 
 resource "aws_route_table_association" "r-sub4" {
     subnet_id = aws_subnet.sub4.id
-    route_table_id = aws_route_table.rt_private.id
-}
-
-
-
-resource "aws_security_group" "sgweb" {
-    name = "sgweb"
-    description = "Allow Web and Management traffic"
-    vpc_id = aws_vpc.vpc1.id
-
-    ingress {
-        description = "ssh"
-        protocol = "tcp"
-        from_port = 22
-        to_port = 22
-        cidr_blocks = ["0.0.0.0/0"]
-    }
-
-    ingress {
-        description = "http"
-        protocol = "tcp"
-        from_port = 80
-        to_port = 80
-        cidr_blocks = ["0.0.0.0/0"]
-    }
-
-    ingress {
-        description = "icmp"
-        protocol = "icmp"
-        cidr_blocks = ["0.0.0.0/0"]
-        from_port = 0
-        to_port = 0
-    }
-
-    ingress {
-        description = "https"
-        protocol = "tcp"
-        from_port = 443
-        to_port = 443
-        cidr_blocks = ["0.0.0.0/0"]
-    }
-
-    # TODO: Make sure this is actually what we want
-    egress {
-        description = "outbound"
-        from_port = 0
-        to_port = 0
-        protocol = "-1"
-        cidr_blocks = ["0.0.0.0/0"]
-    }
+    route_table_id = aws_route_table.rt_nat.id
 }
 

@@ -1,3 +1,7 @@
+############################################################
+# Load Balancer
+#   - Warning:  only has one backend server for this example
+############################################################
 
 resource "aws_eip" "eip_lb" {
     vpc = true
