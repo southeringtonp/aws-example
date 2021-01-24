@@ -14,6 +14,13 @@ resource "aws_security_group" "sg_ssh" {
         to_port = 22
         cidr_blocks = ["0.0.0.0/0"]
     }
+    ingress {
+        description = "icmp"
+        protocol = "icmp"
+        from_port = -1
+        to_port = -1
+        cidr_blocks = ["10.0.0.0/16"]
+    }
 
     egress {
         description = "outbound"
