@@ -13,7 +13,7 @@ resource "aws_lb" "lb" {
     internal = false
     load_balancer_type = "application"
 
-    security_groups = [aws_security_group.sgweb.id] #TODO: Separate security group
+    security_groups = [aws_security_group.sg_web.id]
     subnets = [ aws_subnet.sub1.id, aws_subnet.sub2.id ]
 
     enable_deletion_protection = false

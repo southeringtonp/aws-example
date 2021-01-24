@@ -5,7 +5,7 @@
 resource "aws_network_interface" "nic3" {
     subnet_id = aws_subnet.sub3.id
     private_ips = ["10.0.3.10"]
-    security_groups = [ aws_security_group.sgweb.id ]   #TODO: different SF
+    security_groups = [ aws_security_group.sg_web.id ]
 }
 
 resource "aws_instance" "compute3" {

@@ -5,7 +5,7 @@
 resource "aws_network_interface" "nic1" {
     subnet_id = aws_subnet.sub1.id
     private_ips = ["10.0.1.10"]
-    security_groups = [ aws_security_group.sgweb.id ]
+    security_groups = [ aws_security_group.sg_ssh.id ]
 }
 
 resource "aws_instance" "compute1" {
