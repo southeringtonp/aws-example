@@ -1,19 +1,19 @@
 
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami#image_owner_alias
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance
 
-
-# Find the latest Ubuntu 20.04 LTS AMI
-# TODO: make sure this only gets official builds
-data "aws_ami" "ubuntu" {
+data "aws_ami" "rhel8" {
+    # Find the latest Red Hat 8 AMI
+    # For filter values see https://access.redhat.com/solutions/15356
+    # TODO: Adjust for current region?
     most_recent = true
-    name_regex = "^ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server"
-    owners = ["aws-marketplace"]
 
+    owners = ["309956199498"]
     filter {
         name = "name"
-        values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server"]
+        values = ["RHEL-8*"]
     }
-
+        
     filter {
         name = "architecture"
         values = ["x86_64"]
@@ -23,5 +23,4 @@ data "aws_ami" "ubuntu" {
         name = "virtualization-type"
         values = ["hvm"]
     }
-
 }

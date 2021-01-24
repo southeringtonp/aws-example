@@ -14,3 +14,9 @@ terraform {
 provider "aws" {
   region = "us-east-1"
 }
+
+# Key pair for compute resources
+resource "aws_key_pair" "sshkey" {
+    key_name = "terraform-key"
+    public_key = file("./id_rsa.pub")
+}
