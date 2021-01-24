@@ -6,7 +6,8 @@ resource "aws_network_interface" "nic3" {
 }
 
 resource "aws_instance" "compute3" {
-    ami = "ami-096fda3c22c1c990a"    # RHEL 8.3
+    #ami = "ami-096fda3c22c1c990a"    # RHEL 8.3
+    ami = data.aws_ami.rhel8.id
     instance_type = "t2.micro"
     instance_initiated_shutdown_behavior = "terminate"
 

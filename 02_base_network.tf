@@ -10,6 +10,7 @@ resource "aws_vpc" "vpc1" {
 
 resource "aws_subnet" "sub1" {
     vpc_id = aws_vpc.vpc1.id
+    availability_zone = data.aws_availability_zones.available.names[0]
     cidr_block = "10.0.1.0/24"
     map_public_ip_on_launch = "false"
     tags = {
@@ -19,6 +20,7 @@ resource "aws_subnet" "sub1" {
 
 resource "aws_subnet" "sub2" {
     vpc_id = aws_vpc.vpc1.id
+    availability_zone = data.aws_availability_zones.available.names[1]
     cidr_block = "10.0.2.0/24"
     map_public_ip_on_launch = "false"
     tags = {
@@ -27,8 +29,8 @@ resource "aws_subnet" "sub2" {
 }
 
 resource "aws_subnet" "sub3" {
-    # TODO: make sure this is *not* accessible from internet (igw/acl)
     vpc_id = aws_vpc.vpc1.id
+    availability_zone = data.aws_availability_zones.available.names[0]
     cidr_block = "10.0.3.0/24"
     tags = {
         Name = "Subnet 3 - Private"
@@ -36,8 +38,8 @@ resource "aws_subnet" "sub3" {
 }
 
 resource "aws_subnet" "sub4" {
-    # TODO: make sure this is *not* accessible from internet (igw/acl)
     vpc_id = aws_vpc.vpc1.id
+    availability_zone = data.aws_availability_zones.available.names[1]
     cidr_block = "10.0.4.0/24"
     tags = {
         Name = "Subnet 4 - Private"
@@ -72,22 +74,10 @@ resource "aws_route_table" "rt_public" {
         cidr_block = "0.0.0.0/0"
         gateway_id = aws_internet_gateway.igw.id
     }
-}
-
-
-
-
-resource "aws_route_table" "rt_private" {
-    vpc_id = aws_vpc.vpc1.id
-    route {
-        cidr_block = "0.0.0.0/0"
-        gateway_id = aws_nat_gateway.natgw.id
-    }
     tags = {
-        Name = "NAT Route Table"
+        Name = "Public Route Table"
     }
 }
-
 
 ## Change the main routing table for the VPC to our custom route table 
 #resource "aws_main_route_table_association" "r-vpc1" {
@@ -105,6 +95,20 @@ resource "aws_route_table_association" "r-sub2" {
     subnet_id = aws_subnet.sub1.id
     route_table_id = aws_route_table.rt_public.id
 }
+
+
+resource "aws_route_table" "rt_private" {
+    vpc_id = aws_vpc.vpc1.id
+    route {
+        cidr_block = "0.0.0.0/0"
+        gateway_id = aws_nat_gateway.natgw.id
+    }
+    tags = {
+        Name = "NAT Route Table"
+    }
+}
+
+
 
 resource "aws_route_table_association" "r-sub3" {
     subnet_id = aws_subnet.sub3.id
