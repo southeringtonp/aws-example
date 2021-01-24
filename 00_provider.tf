@@ -1,7 +1,15 @@
-#https://registry.terraform.io/providers/hashicorp/aws/latest/docs
+############################################################
+# Provider configuration
+#
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs
+#
+# Note: AWS credentials and region are intentionally omitted
+#       on the assumption that they will be handled externally
+#       to terraform.
+#
+############################################################
 
 terraform {
-  # TODO: Specify region, instance ID for AMI
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -15,8 +23,3 @@ provider "aws" {
   region = "us-east-1"
 }
 
-# Key pair for compute resources
-resource "aws_key_pair" "sshkey" {
-    key_name = "terraform-key"
-    public_key = file("./id_rsa.pub")
-}
